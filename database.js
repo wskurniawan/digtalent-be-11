@@ -1,6 +1,6 @@
 import sqlite from 'sqlite3'
 
-//export.initDatabase
+//exports.initDatabase
 export function initDatabase() {
   return new sqlite.Database('data', (err) => {
     if (err) {

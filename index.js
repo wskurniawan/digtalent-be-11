@@ -4,9 +4,14 @@ import path from 'path'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 
+//const database = require('./database')
+import { initDatabase, initTable, insertProduct } from './database.js'
+
 const __dirname = path.resolve()
 
 const app = express()
+const db = initDatabase()
+initTable(db)
 
 app.set('views', __dirname + '/layouts')
 app.set('view engine', 'html')
@@ -25,6 +30,8 @@ app.get('/', (req, res, next) => {
   res.send({ success: true })
 })
 
+
+// get product list
 app.get('/product', (req, res, next) => {
   res.render('product')
 })
@@ -37,7 +44,11 @@ app.get('/add-product', (req, res, next) => {
 // handle form POST method
 app.post('/add-product', (req, res, next) => {
   console.log('Request', req.body)
-  res.send(req.body)
+  // insert product
+  insertProduct(db, req.body.name, parseInt(req.body.price), '-')
+  
+  // redirect
+  res.redirect('/product')
 })
 
 app.use((err, req, res, next) => {
